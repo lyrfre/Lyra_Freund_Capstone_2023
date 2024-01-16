@@ -72,9 +72,9 @@ const login = () => {
   return (
     <div>
         <div className='login'>
-            <button onClick={toggleForm}>Login</button>
+            {/* <button onClick={toggleForm}>Login</button> */}
             <div>
-                {showForm &&(
+                {/* {showForm &&( */}
                     <form key={formKey} onSubmit={handleSubmit}>
                         <label>
                             Username:
@@ -90,10 +90,10 @@ const login = () => {
                         </label>
                         <input type = "submit" value = "Submit"/>
                     </form>
-                )}
+                {/* )} */}
             </div>
         </div>
-        <div className='create_account_btn_frm'>
+        {/* <div className='create_account_btn_frm'>
             <button onClick={toggleForm}>Create an Account</button>
             <div>
                 {showForm && (
@@ -114,7 +114,7 @@ const login = () => {
                     </form>
                     )}
             </div>
-        </div>
+        </div> */}
     </div>
   )
 }

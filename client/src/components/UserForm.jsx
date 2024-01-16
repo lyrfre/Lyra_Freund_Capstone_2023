@@ -20,6 +20,7 @@ const UserForm = ( { addUser, handlePostStatus }) => {
         })
     }
 
+    const [formKey, setFormKey] = useState(Date.now());
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -31,6 +32,9 @@ const UserForm = ( { addUser, handlePostStatus }) => {
               body: JSON.stringify(form),
             })
             .then(r => r.json())
+            .then(() =>{
+                setFormKey(Date.now())
+            })
             .then(newUser => {
                 addUser(newUser)
                 handlePostStatus()
@@ -40,7 +44,30 @@ const UserForm = ( { addUser, handlePostStatus }) => {
                 password: '',
                 email: '',
             }))
+            .catch(error => {
+                console.error('Error:', error);
+              })
             }
+
+    
+            // const handleSignUp = (event) => {
+            //     event.preventDefault();
+            //     fetch('/users', {
+            //         method: 'POST',
+            //         headers:{
+            //         'Content-Type': 'application/json',
+            //         },
+            //         body: JSON.stringify(formData),
+            //     })
+            //     .then(response => response.json())
+            //     .then(() => {
+            //         setFormKey(Date.now());
+            //     })
+            //     // .then(() => toggleForm())
+            //     .catch(error => {
+            //         console.error('Error:', error);
+            //     });
+            // }
     }
 
     return(
