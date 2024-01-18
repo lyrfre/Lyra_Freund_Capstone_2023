@@ -2,7 +2,7 @@
 
 
 # Standard library imports
-from models import User, Translation
+from models import User
 from flask import request, render_template, session
 from flask_restful import Resource
 # from flask_sqlalchemy import SQLAlchemy
@@ -30,8 +30,10 @@ class Login(Resource):
     def post(self):
         data = request.get_json()
         username = data['username']
+        print(username)
         password = data['password']
-        user = User.query.filter(username == username).first()
+        user = User.query.filter(User.username == username).first()
+        print(user.id)
         if user:
             if user.authenticate(password):
                 session['user_id'] = user.id
@@ -212,10 +214,10 @@ class UserById(Resource):
 api.add_resource(UserById, "/users/<int:id>")
 
 
-class Translations(Resource):
-    def get(self, user_id):
-        translations = [translation.to_dict() for translation in Translation.query.filter_by(user_id = user_id).all()]
-        return translations
+# class Translations(Resource):
+#     def get(self, user_id):
+#         translations = [translation.to_dict() for translation in Translation.query.filter_by(user_id = user_id).all()]
+#         return translations
     
 
 
@@ -225,7 +227,7 @@ class Translations(Resource):
 
 
 
-api.add_resource(Translations, "/user-translations")
+# api.add_resource(Translations, "/user-translations")
 # Views go here! use either route!
 # @app.errorhandler(404)
 # def not_found(e):

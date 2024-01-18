@@ -1,12 +1,14 @@
-import React from 'react'
+import React from "react";
+import Login from "../components/Login";
 
-const Home = () => {
+const Home = ({ user }) => {
+  // if (!user) return <Login />;
+
   return (
-<div>
-    
-</div>
+    <div>
+      <h1>Home</h1>
+    </div>
+  );
+};
 
-  )
-}
-
-export default Home
+export default Home;

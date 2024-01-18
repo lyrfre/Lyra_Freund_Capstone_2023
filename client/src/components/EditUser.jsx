@@ -1,48 +1,35 @@
 import React, { useState } from "react";
+import Button from "react-bootstrap/Button";
 
-const UserForm = ({ addUser, handlePostStatus }) => {
+
+const EditUser = ({ user, deleteUser, setUser }) => {
   const [form, setForm] = useState({
-    id: "",
-    username: "",
-    password: "",
-    email: "",
+    username: !user ? ""  :user.username,
+    email: !user ? ""  :user.email,
   });
 
   const handleChange = (e) => {
     setForm({
       ...form,
-
-      // id or name??
       [e.target.name]: e.target.value,
     });
   };
 
-  const [formKey, setFormKey] = useState(Date.now());
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch("/users", {
-      method: "POST",
+    console.log(form)
+    fetch(`/api/users/${user.id}`, {
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(form),
     })
       .then((r) => r.json())
-      .then(() => {
-        setFormKey(Date.now());
+      .then((data) => {
+        setUser(data);
       })
-      .then((newUser) => {
-        addUser(newUser);
-        handlePostStatus();
-      })
-      .then(
-        setForm({
-          username: "",
-          password: "",
-          email: "",
-        })
-      )
       .catch((error) => {
         console.error("Error:", error);
       });
@@ -80,7 +67,7 @@ const UserForm = ({ addUser, handlePostStatus }) => {
             required
           />
         </label>
-        <label>
+        {/* <label>
           Password:
           <input
             type="text"
@@ -89,7 +76,7 @@ const UserForm = ({ addUser, handlePostStatus }) => {
             onChange={handleChange}
             required
           />
-        </label>
+        </label> */}
         <label>
           Email:
           <input
@@ -100,10 +87,11 @@ const UserForm = ({ addUser, handlePostStatus }) => {
             required
           />
         </label>
-        <button type="submit">Submit</button>
+        <Button variant="primary" type="submit">Submit</Button>
       </form>
+        <Button onClick={() => deleteUser(user.id)} variant="danger">Delete The User Profile</Button>
     </div>
   );
 };
 
-export default UserForm;
+export default EditUser;
