@@ -17,7 +17,7 @@ if __name__ == '__main__':
         # User.query.delete()
         db.create_all()
         print("Starting seed...")
-        # Seed code goes here!'
+        
         users = []
         for n in range (20):
             user = User(username = fake.name(), password_hash = "123", email = fake.email())

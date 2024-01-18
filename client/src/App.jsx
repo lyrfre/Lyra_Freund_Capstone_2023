@@ -69,7 +69,7 @@ function App() {
         <Route path="createUser" element={<UserForm user={user} onLogin={setUser}/>} />
         <Route path="editUser" element={<EditUser user={user} setUser={setUser} deleteUser={deleteUser}/>} />
 
-        <Route path="translation"element={<Translation users = {users} />} />
+        <Route path="translation"element={<Translation user={user} users = {users} />} />
         <Route path="favorites" element={<Favorites users = {users} />}/>
       </Route>
     )

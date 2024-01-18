@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
-const TranslationComponent = () => {
-  const [text, setText] = useState('');
-  const l1 = "en"
-  const [l2, setL2] = useState("")
-  const [translatedText, setTranslatedText] = useState('');
+const TranslationComponent = ({ user }) => {
+  const [text, setText] = useState("");
+  const l1 = "en";
+  const [l2, setL2] = useState("");
+  const [translatedText, setTranslatedText] = useState("");
   // const [languages, setLanguages] = useState([]);
 
   // useEffect(() => {
   //   const fetchLanguages = () => {
-  //     const response =  
-  //     fetch('/translate', 
+  //     const response =
+  //     fetch('/translate',
   //     { method: 'GET' });
   //     const data = response.json();
   //     setLanguages(data);
@@ -18,6 +18,33 @@ const TranslationComponent = () => {
 
   //   fetchLanguages();
   // }, []);
+
+  const saveTranslation = async () => {
+
+    const object = {
+      user_id: user.id,
+      input_word: text,
+      output_word: translatedText,
+      }
+      console.log(object)
+    try {
+      const response = await fetch("/api/favorites", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user_id: user.id,
+          input_word: text,
+          output_word: translatedText,
+        }),
+      });
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error("Error translating text:", error);
+    }
+  };
 
   const handleTextChange = (event) => {
     setText(event.target.value);
@@ -27,21 +54,20 @@ const TranslationComponent = () => {
     setL2(event.target.value);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response =  
-      fetch('/translate', {
-        method: 'POST',
+      const response = await fetch("/api/translate", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ text, l1: l1, l2: l2 }),
       });
-      const data = response.json();
+      const data = await response.json();
       setTranslatedText(data.translatedText);
     } catch (error) {
-      console.error('Error translating text:', error);
+      console.error("Error translating text:", error);
     }
   };
 
@@ -62,6 +88,9 @@ const TranslationComponent = () => {
         <div>
           <h3>Translated Text:</h3>
           <p>{translatedText}</p>
+          {user ? (
+            <button onClick={saveTranslation}> Save Translation</button>
+          ) : null}
         </div>
       )}
     </div>

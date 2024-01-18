@@ -2,7 +2,7 @@
 
 
 # Standard library imports
-from models import User
+from models import User, Translation, Input_word, Output_word, Favorite
 from flask import request, render_template, session
 from flask_restful import Resource
 # from flask_sqlalchemy import SQLAlchemy
@@ -123,7 +123,8 @@ def translate_text(text, l2, l1 = "en"):
         response = requests.post(url, data=payload, headers=headers)
         translated_text = response.json()
         print(translated_text)
-        return translated_text["translatedText"], 200
+        # {'data': {'translations': [{'translatedText': 'Hola'}]}}
+        return translated_text["data"]["translations"][0], 200
     except ValueError as e:
             print(e.__str__())
             return{
@@ -135,17 +136,35 @@ class API(Resource):
     def get(self):
         return language_list()
     
-    def post(self):
-        data = request.get_json()
-        text = data["text"]
-        return detect_language(text)
+    # def post(self):
+    #     data = request.get_json()
+    #     text = data["text"]
+    #     return detect_language(text)
     
     def post(self):
         data = request.get_json()
         text = data["text"]
+        new_word = Input_word(
+            input_language = 'en',
+            input_word = text
+        )
+        db.session.add(new_word)
+        db.session.commit()
         l1 = data["l1"]
         l2 = data["l2"]
-        return translate_text(text, l1, l2)
+        new_translation = translate_text(text, l2, l1)
+        print(new_translation[0]["translatedText"])
+        new_output_word = Output_word( output_language = l2, output_word = new_translation[0]["translatedText"])
+        db.session.add(new_output_word)
+        db.session.commit()
+        try:
+            if session["user_id"]:
+                translation_instance = Translation(user_id = session["user_id"], input_word = new_word, output_word = new_output_word )
+                db.session.add(translation_instance)
+                db.session.commit()
+        except Exception as e:
+            print(e.__str__())
+        return new_translation
     
 api.add_resource(API, "/translate")
 
@@ -213,12 +232,43 @@ class UserById(Resource):
     
 api.add_resource(UserById, "/users/<int:id>")
 
+class Favorites(Resource):
+    def get(self):
+        favorites = Favorite.query.filter_by(user_id = session["user_id"]).all()
+        return favorites.to_dict(), 200
+    
+    def post(self):
+        data = request.get_json()
+        try:
+            new_favorite = Favorite(
+                user_id = data["user_id"],
+                input_word = data["input_word"],
+                output_word = data["output_word"]
+            )
+            db.session.add(new_favorite)
+            db.session.commit()
+            return new_favorite.to_dict(), 201
+        except Exception as e:
+            print(e.__str__())
+            return{
+                "errors":["validation errors"]
+            }, 400
+        
+    
+
+api.add_resource(Favorites, "/favorites")
 
 # class Translations(Resource):
 #     def get(self, user_id):
 #         translations = [translation.to_dict() for translation in Translation.query.filter_by(user_id = user_id).all()]
 #         return translations
     
+#     def post(self):
+#         data = request.json()
+#         try:
+
+
+# api.add_resource(, "/favorites")
 
 
 # call api functions inside Translations, Outputs & Inputs to post to those tables similar to API class.
