@@ -7,17 +7,17 @@ const TranslationComponent = () => {
   const [translatedText, setTranslatedText] = useState('');
   // const [languages, setLanguages] = useState([]);
 
-  useEffect(() => {
-    const fetchLanguages = async () => {
-      const response = await 
-      fetch('/translate', 
-      { method: 'GET' });
-      const data = await response.json();
-      setLanguages(data);
-    };
+  // useEffect(() => {
+  //   const fetchLanguages = () => {
+  //     const response =  
+  //     fetch('/translate', 
+  //     { method: 'GET' });
+  //     const data = response.json();
+  //     setLanguages(data);
+  //   };
 
-    fetchLanguages();
-  }, []);
+  //   fetchLanguages();
+  // }, []);
 
   const handleTextChange = (event) => {
     setText(event.target.value);
@@ -27,10 +27,10 @@ const TranslationComponent = () => {
     setL2(event.target.value);
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
     try {
-      const response = await 
+      const response =  
       fetch('/translate', {
         method: 'POST',
         headers: {
@@ -38,7 +38,7 @@ const TranslationComponent = () => {
         },
         body: JSON.stringify({ text, l1: l1, l2: l2 }),
       });
-      const data = await response.json();
+      const data = response.json();
       setTranslatedText(data.translatedText);
     } catch (error) {
       console.error('Error translating text:', error);
