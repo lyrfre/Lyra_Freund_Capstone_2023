@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import LangCard from "../components/LangCard";
+import image from "../assets/translateLogo.svg"
 
 const TranslationComponent = ({ user }) => {
   const [text, setText] = useState("");
@@ -18,6 +20,19 @@ const TranslationComponent = ({ user }) => {
 
   //   fetchLanguages();
   // }, []);
+
+  // const [secondSelectedLang, setSecondSelectedLang] = useState("")
+  const secondOptions = [
+    { value: "en", label: "English" },
+    { value: "fr", label: "French" },
+    { value: "de", label: "German" },
+    { value: "it", label: "Italian" },
+    { value: "es", label: "Spanish" },
+    { value: "ar", label: "Arabic" },
+    { value: "ja", label: "Japanese" },
+    { value: "zh", label: "Chinese" }
+  ]
+
 
   const saveTranslation = async () => {
 
@@ -50,9 +65,9 @@ const TranslationComponent = ({ user }) => {
     setText(event.target.value);
   };
 
-  const handleL2Change = (event) => {
-    setL2(event.target.value);
-  };
+  // const handleL2Change = (event) => {
+  //   setL2(event.target.value);
+  // };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -79,22 +94,32 @@ const TranslationComponent = ({ user }) => {
           <textarea value={text} onChange={handleTextChange} />
         </div>
         <div>
-          <label>Target Language (example: 'es'):</label>
-          <input type="text" value={l2} onChange={handleL2Change} />
+          <label>
+            Select Translation Language:
+          </label>
+          <select className="languageSelection" value={l2} onChange={e => setL2(e.target.value)}>
+            {secondOptions.map(secondOption => (
+              <option key={secondOption.value} value={secondOption.value}>
+                {secondOption.label}
+              </option>
+            ))}
+        </select>
         </div>
         <button type="submit">Translate</button>
       </form>
-      {translatedText && (
-        <div>
-          <h3>Translated Text:</h3>
-          <p>{translatedText}</p>
+      <div>
+        { translatedText && (
+          <div>
+           <LangCard translatedText = {translatedText} secondSelectedLang = {l2} text = {text} /> 
           {user ? (
             <button onClick={saveTranslation}> Save Translation</button>
           ) : null}
-        </div>
-      )}
+          </div>
+          )}
+
+      </div>
     </div>
   );
-};
+}
 
 export default TranslationComponent;

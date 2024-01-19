@@ -1,54 +1,34 @@
 import React from 'react'
 
-function LangCard() {
+function LangCard({translatedText, secondSelectedLang, text}) {
 
-    const [formData, setFormData] = useState({
-        input_language: '',
-        input_word: '',
-        email: '',
-      });
-      const [formKey, setFormKey] = useState(Date.now());
+    // const [formData, setFormData] = useState({
+    //     input_language: '',
+    //     input_word: '',
+    //     email: '',
+    //   });
+    //   const [formKey, setFormKey] = useState(Date.now());
 
-    const handleChange = (event) => {
-        setFormData({
-          ...formData,
-          [event.target.name]: event.target.value
-        });
-      }
-      
-      function handleSubmit(e) {
-        e.preventDefault();
-        // setIsLoading(true);
-        fetch("/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ username, password }),
-        }).then((r) => {
-          setIsLoading(false);
-          if (r.ok) {
-            r.json().then((user) => onLogin(user));
-          } else {
-            r.json().then((err) => setErrors(err.errors));
-          }
-        });
-      }
+    // const handleChange = (event) => {
+    //     setFormData({
+    //       ...formData,
+    //       [event.target.name]: event.target.value
+    //     });
+    //   }
 
   return (
     <div>
-        <div>
-            <form key = {formKey} onSubmit = {handleSubmit}>
-                <label>
-                    Input Language:
-                    <input type = "text" input_language = "input language" onChange={handleChange}/>
-                </label>
-                <label>
-                    Text:
-                    <input type = "text" input_word = "input word" onChange={handleChange}/>
-                </label>
-            </form>
-        </div>
+        <div id="wordCard">
+          <h4 id="originalWord">Original Text: {text}</h4>
+          <h4 id="translatedWord">Translated Text: {translatedText} </h4>
+          {/* <div className="details">
+            {isFavorite ? (
+              <button className="emoji-button favorite active" onClick={handleFavorite}>★</button>
+            ) : (
+              <button className="emoji-button favorite" onClick={handleFavorite}>☆</button>
+            )}
+          </div> */}
+      </div>
     </div>
   )
 }

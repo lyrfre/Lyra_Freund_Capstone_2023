@@ -2,7 +2,7 @@ import { useLoaderData, useParams } from "react-router-dom"
 import React, { useState } from "react"
 import image from "../assets/translateLogo.svg"
 
-function LangForm({ updateWords }) {
+function LangForm({ translatedText }) {
 
   const [translatedWord, setTranslatedWord] = useState('')
 
@@ -85,7 +85,7 @@ function LangForm({ updateWords }) {
       api_key: import.meta.env.VITE_APIKEY
     }
     console.log(tranObj)
-    fetch("https://libretranslate.com/translate", {
+    fetch("api/", {
       method: "POST",
       body: JSON.stringify(tranObj),
       headers: { "Content-Type": "application/json" }

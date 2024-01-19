@@ -70,7 +70,7 @@ function App() {
         <Route path="editUser" element={<EditUser user={user} setUser={setUser} deleteUser={deleteUser}/>} />
 
         <Route path="translation"element={<Translation user={user} users = {users} />} />
-        <Route path="favorites" element={<Favorites users = {users} />}/>
+        <Route path="favorites" element={<Favorites user = {user} users = {users} />}/>
       </Route>
     )
   )

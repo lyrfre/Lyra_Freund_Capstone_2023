@@ -234,8 +234,8 @@ api.add_resource(UserById, "/users/<int:id>")
 
 class Favorites(Resource):
     def get(self):
-        favorites = Favorite.query.filter_by(user_id = session["user_id"]).all()
-        return favorites.to_dict(), 200
+        favorites = [ user.to_dict() for user in Favorite.query.filter_by(user_id = session["user_id"]).all()]
+        return favorites, 200
     
     def post(self):
         data = request.get_json()
